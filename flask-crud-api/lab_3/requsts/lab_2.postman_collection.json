@@ -1,0 +1,547 @@
+{
+	"info": {
+		"_postman_id": "4a86669a-5675-4d5f-a8b8-6f7b39365310",
+		"name": "lab_2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31061267"
+	},
+	"item": [
+		{
+			"name": "user-requsts",
+			"item": [
+				{
+					"name": "create-user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"santy6u4jer1\",\n    \"money\": 213124\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{PROTOCOL}}://{{DST_HOST}}/user"
+					},
+					"response": [
+						{
+							"name": "create-user",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"sa2yner2345421\",\n    \"money\": 213124\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{PROTOCOL}}://{{DST_HOST}}/user"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/3.0.1 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Nov 2023 04:58:42 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "47"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 6,\n    \"name\": \"sayner23421\",\n    \"money\": 213124\n}"
+						}
+					]
+				},
+				{
+					"name": "get-user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{PROTOCOL}}://{{DST_HOST}}/user?userID={{userID}}",
+							"protocol": "{{PROTOCOL}}",
+							"host": [
+								"{{DST_HOST}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "userID",
+									"value": "{{userID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{PROTOCOL}}://{{DST_HOST}}/users"
+					},
+					"response": []
+				},
+				{
+					"name": "delete-user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{PROTOCOL}}://{{DST_HOST}}/user?userID={{userID}}",
+							"protocol": "{{PROTOCOL}}",
+							"host": [
+								"{{DST_HOST}}"
+							],
+							"path": [
+								"user"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "{{userID}}"
+								},
+								{
+									"key": "userID",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-account",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PROTOCOL}}://{{DST_HOST}}/user/account?userID={{userID}}",
+							"protocol": "{{PROTOCOL}}",
+							"host": [
+								"{{DST_HOST}}"
+							],
+							"path": [
+								"user",
+								"account"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "{{userID}}"
+								},
+								{
+									"key": "userID",
+									"value": "123",
+									"disabled": true
+								},
+								{
+									"key": "userID",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category-requsts",
+			"item": [
+				{
+					"name": "create-category",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"ar43rtwghg category1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{PROTOCOL}}://{{DST_HOST}}/category"
+					},
+					"response": [
+						{
+							"name": "create-category",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"sa43y12345 category\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{PROTOCOL}}://{{DST_HOST}}/category"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/3.0.1 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Nov 2023 05:02:17 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "31"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 3,\n    \"name\": \"say category\"\n}"
+						}
+					]
+				},
+				{
+					"name": "get-category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PROTOCOL}}://{{DST_HOST}}/category?categoryID={{categoryID}}",
+							"protocol": "{{PROTOCOL}}",
+							"host": [
+								"{{DST_HOST}}"
+							],
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "categoryID",
+									"value": "{{categoryID}}"
+								},
+								{
+									"key": "categoryID",
+									"value": "4",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-categories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{PROTOCOL}}://{{DST_HOST}}/categories"
+					},
+					"response": []
+				},
+				{
+					"name": "delete-category",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{PROTOCOL}}://{{DST_HOST}}/category?categoryID={{categoryID}}",
+							"protocol": "{{PROTOCOL}}",
+							"host": [
+								"{{DST_HOST}}"
+							],
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "categoryID",
+									"value": "{{categoryID}}"
+								},
+								{
+									"key": "categoryID",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "records-requsts",
+			"item": [
+				{
+					"name": "create-record",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{PROTOCOL}}://{{DST_HOST}}/record?userID={{userID}}&categoryID={{categoryID}}&amount={{amount}}",
+							"protocol": "{{PROTOCOL}}",
+							"host": [
+								"{{DST_HOST}}"
+							],
+							"path": [
+								"record"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "{{userID}}"
+								},
+								{
+									"key": "categoryID",
+									"value": "{{categoryID}}"
+								},
+								{
+									"key": "amount",
+									"value": "{{amount}}"
+								},
+								{
+									"key": "userID",
+									"value": "7",
+									"disabled": true
+								},
+								{
+									"key": "categoryID",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "amount",
+									"value": "163074",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create-record",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{PROTOCOL}}://{{DST_HOST}}/record?userID=7&categoryID=4&amount=163074",
+									"protocol": "{{PROTOCOL}}",
+									"host": [
+										"{{DST_HOST}}"
+									],
+									"path": [
+										"record"
+									],
+									"query": [
+										{
+											"key": "userID",
+											"value": "{{userID}}",
+											"disabled": true
+										},
+										{
+											"key": "categoryID",
+											"value": "{{categoryID}}",
+											"disabled": true
+										},
+										{
+											"key": "amount",
+											"value": "{{amount}}",
+											"disabled": true
+										},
+										{
+											"key": "userID",
+											"value": "7"
+										},
+										{
+											"key": "categoryID",
+											"value": "4"
+										},
+										{
+											"key": "amount",
+											"value": "163074"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Server",
+									"value": "Werkzeug/3.0.1 Python/3.11.3"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Nov 2023 05:44:38 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "109"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 4,\n    \"user_id\": 7,\n    \"category_id\": 4,\n    \"time\": \"Sun, 19 Nov 2023 05:44:38 GMT\",\n    \"amount_of_expenditure\": 163074\n}"
+						}
+					]
+				},
+				{
+					"name": "get-record",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PROTOCOL}}://{{DST_HOST}}/record?userID={{userID}}&categoryID={{categoryID}}",
+							"protocol": "{{PROTOCOL}}",
+							"host": [
+								"{{DST_HOST}}"
+							],
+							"path": [
+								"record"
+							],
+							"query": [
+								{
+									"key": "userID",
+									"value": "{{userID}}"
+								},
+								{
+									"key": "categoryID",
+									"value": "{{categoryID}}"
+								},
+								{
+									"key": "userID",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "categoryID",
+									"value": "3",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-record",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{PROTOCOL}}://{{DST_HOST}}/record?recordID={{recordID}}",
+							"protocol": "{{PROTOCOL}}",
+							"host": [
+								"{{DST_HOST}}"
+							],
+							"path": [
+								"record"
+							],
+							"query": [
+								{
+									"key": "recordID",
+									"value": "{{recordID}}"
+								},
+								{
+									"key": "recordID",
+									"value": "12",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "DST_HOST",
+			"value": "127.0.0.1:5000",
+			"type": "string"
+		},
+		{
+			"key": "PROTOCOL",
+			"value": "http",
+			"type": "string"
+		}
+	]
+}
