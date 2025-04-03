@@ -1,7 +1,7 @@
 import math
 import string
 from abc import ABC, abstractmethod
-
+from collections import defaultdict, Counter
 import numpy as np
 
 
@@ -23,7 +23,7 @@ class WheatstoneCipher(Cipher, ABC):
         if len(alphabet) - 1 < filler_letter_id:
             raise IndexError
         self.__filler_letter = alphabet[filler_letter_id]
-        self.__small_punctuation_string = " ,.?!:;—()[]{}«»"
+        self.__small_punctuation_string = " ,.?!:;—-()'\""
         self.__m1 = self.__generate_matrix(self.__alphabet, punctuation=punctuation, full_punctuation=full_punctuation)
         self.__m2 = self.__generate_matrix(self.__alphabet, punctuation=punctuation, full_punctuation=full_punctuation)
 
@@ -87,16 +87,16 @@ class WheatstoneCipher(Cipher, ABC):
 class AffineCipher(Cipher, ABC):
 
     def __init__(self, alphabet, a, b):
-        self.__alphabet = alphabet
+        self.__alphabet = alphabet + " ,.?!:;—-()'\""
 
         self.__a = a
         self.__b = b
-        self.__m = len(alphabet)
+        self.__m = len(self.__alphabet)
 
         self.__inverse_a = self.__mod_inverse(self.__a, self.__m)
 
-        self.__cipher_map = {alphabet[i]: i for i in range(len(alphabet))}
-        self.__reverse_cipher_map = {i: alphabet[i] for i in range(len(alphabet))}
+        self.__cipher_map = {self.__alphabet[i]: i for i in range(len(self.__alphabet))}
+        self.__reverse_cipher_map = {i: self.__alphabet[i] for i in range(len(self.__alphabet))}
 
     def encode(self, message):
         encoded_message = ""
@@ -149,3 +149,153 @@ class DoubleAffineCipher(Cipher, ABC):
     def decode(self, encoded_message):
         first_iteration_result = self.__second_cipher.decode(encoded_message)
         return self.__first_cipher.decode(first_iteration_result)
+
+
+class RC4(Cipher, ABC):
+    def __init__(self, n, key, converted_type='byte', return_type='byte'):
+        self.__S_size = 2 ** n
+        self.__S = np.zeros((self.__S_size,), dtype=np.uint8)
+        self.__key_block = np.zeros((self.__S_size,), dtype=np.uint8)
+        key = str(key).encode('utf-8')
+        for i in range(self.__S_size):
+            self.__S[i] = i
+            self.__key_block[i] = key[i % len(key)]
+        j = 0
+        for i in range(self.__S_size):
+            j = (j + self.__S[i] + self.__key_block[i]) % self.__S_size
+            self.__S[i], self.__S[j] = self.__S[j], self.__S[i]
+        self.__c_type = converted_type
+        self.__r_type = return_type
+
+    def encode(self, message):
+        message_bytes = message
+        if self.__c_type == 'byte':
+            message_bytes = message.encode('utf-8')
+        key_stream = self.__generate_key_stream(len(message_bytes))
+        encoded_message_bytes = np.bitwise_xor(np.frombuffer(message_bytes, dtype=np.uint8), key_stream)
+        return encoded_message_bytes.tobytes()
+
+    def decode(self, encoded_message):
+        encoded_message_bytes = np.frombuffer(encoded_message, dtype=np.uint8)
+        key_stream = self.__generate_key_stream(len(encoded_message_bytes))
+        decoded_message_bytes = np.bitwise_xor(encoded_message_bytes, key_stream)
+        if self.__r_type == 'str':
+            return decoded_message_bytes.tobytes().decode('utf-8')
+        return decoded_message_bytes.tobytes()
+
+    def __generate_key_stream(self, length):
+        S = np.copy(self.__S)
+        i = 0
+        j = 0
+        key_stream = np.zeros(length, dtype=np.uint8)
+
+        for k in range(length):
+            i = (i + 1) % self.__S_size
+            j = (j + S[i]) % self.__S_size
+            S[i], S[j] = S[j], S[i]
+            t = (int(S[i]) + int(S[j])) % self.__S_size
+            key_stream[k] = S[t]
+
+        return key_stream
+
+
+class DoubleRC4(Cipher, ABC):
+
+    def __init__(self, n1, key1, n2, key2, return_type='byte'):
+        self.__first_cipher = RC4(n1, key1, return_type=return_type)
+        self.__second_cipher = RC4(n2, key2, converted_type='none')
+
+    def encode(self, message):
+        first_iteration = self.__first_cipher.encode(message)
+        return self.__second_cipher.encode(first_iteration)
+
+    def decode(self, encoded_message):
+        first_iteration = self.__second_cipher.decode(encoded_message)
+        return self.__first_cipher.decode(first_iteration)
+
+
+class VigenereCipher(Cipher, ABC):
+
+    def __init__(self, alphabet, key):
+        self.__alphabet_len = len(alphabet)
+        self.__alphabet = alphabet
+        self.__tabular_recta = np.empty((self.__alphabet_len, self.__alphabet_len), dtype=np.str_)
+        for i in range(self.__alphabet_len):
+            for j in range(self.__alphabet_len):
+                self.__tabular_recta[i, j] = alphabet[(j + i) % self.__alphabet_len]
+        self.__key = key
+
+    def encode(self, message):
+        encoded_message = []
+        key_repeated = (self.__key * (len(message) // len(self.__key))) + self.__key[:len(message) % len(self.__key)]
+
+        for i in range(len(message)):
+            message_idx = self.__alphabet.index(message[i])
+            key_idx = self.__alphabet.index(key_repeated[i])
+            encoded_message.append(str(self.__tabular_recta[key_idx, message_idx]))
+        return ''.join(encoded_message)
+
+    def decode(self, encoded_message):
+        decoded_message = []
+        key_repeated = ((self.__key * (len(encoded_message) // len(self.__key)))
+                        + self.__key[:len(encoded_message) % len(self.__key)])
+
+        for i in range(len(encoded_message)):
+            encoded_idx = self.__alphabet.index(encoded_message[i])
+            key_idx = self.__alphabet.index(key_repeated[i])
+            decoded_idx = (encoded_idx - key_idx) % self.__alphabet_len
+            decoded_message.append(self.__alphabet[decoded_idx])
+
+        return ''.join(decoded_message)
+
+
+def kasiski_analysis(ciphertext):
+    substrings = defaultdict(list)
+    for i in range(len(ciphertext) - 3):
+        substring = ciphertext[i:i + 4]
+        substrings[substring].append(i)
+
+    distances = []
+    for substring, positions in substrings.items():
+        if len(positions) > 1:
+            for i in range(1, len(positions)):
+                distances.append(positions[i] - positions[i - 1])
+
+    return distances
+
+
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+
+def get_possible_key_lengths(distances):
+    gcds = []
+    for i in range(len(distances) - 1):
+        gcds.append(gcd(distances[i], distances[i + 1]))
+    return gcds
+
+
+def frequency_analysis(text):
+    return dict(Counter(text))
+
+
+def get_shift_from_frequencies(text, expected_frequency):
+    frequencies = frequency_analysis(text)
+    most_common_char = max(frequencies, key=frequencies.get)
+    shift = (ord(most_common_char) - ord(expected_frequency)) % 26
+    return shift
+
+
+def break_vigenere_cipher(ciphertext, key_length):
+    groups = ['' for _ in range(key_length)]
+    for i, char in enumerate(ciphertext):
+        groups[i % key_length] += char
+
+    key = ''
+    for group in groups:
+        shift = get_shift_from_frequencies(group, 'e')
+        key += chr(shift + ord('A'))
+
+    return key
